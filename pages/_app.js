@@ -10,6 +10,8 @@ import '@ionic/react/css/display.css';
 
 import '../styles/global.css';
 import '../styles/variables.css';
+import { MoralisProvider } from 'react-moralis';
+
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -21,7 +23,7 @@ function MyApp({ Component, pageProps }) {
         <title>Boilerplate</title>
         <meta
           name="google-site-verification"
-          // content="3XoSVdS7QLQWutddbE1sJ60XT3mFR-WXrP80V4AharU"
+          // content=""
         />
         <meta name="description" content="" />
         <meta name="keywords" content="" />
@@ -35,11 +37,11 @@ function MyApp({ Component, pageProps }) {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#f2f1f6"></meta>
+        <meta name="theme-color" content="#fff"></meta>
 
         {/* ICONS */}
-        <link rel="icon" href="/favicon-196.png" />
-        <link rel="apple-touch-icon" href="/apple-icon-180.png"  />
+        <link rel="icon" href="/icon.png" />
+        <link rel="apple-touch-icon" href="/apple-icon-180.png" />
         <link
           rel="apple-touch-startup-image"
           href="/apple-splash-2048-2732.jpg"
@@ -170,9 +172,13 @@ function MyApp({ Component, pageProps }) {
           href="/apple-splash-1136-640.jpg"
           media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
         />
-        <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
       </Head>
-      <Component {...pageProps} />
+      <MoralisProvider
+        appId={process.env.NEXT_PUBLIC_APPID}
+        serverUrl={process.env.NEXT_PUBLIC_SERVERURL}
+      >
+        <Component {...pageProps} />
+      </MoralisProvider>
     </>
   );
 }

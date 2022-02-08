@@ -1,6 +1,6 @@
 {
   "appId": "com.example.app",
-  "appName": "periodictable",
+  "appName": "dapp-boilerplate",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "out",
