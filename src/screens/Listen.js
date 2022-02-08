@@ -107,7 +107,10 @@ const Listen = () => {
             matchesInARow = 0;
           }
           console.log('matchesInARow', matchesInARow);
-        }, 100);
+          if(matchesInARow == 4){
+            alert('Unlocked');
+          }
+        }, 5);
 
         // frameLooper();
       });
@@ -147,22 +150,20 @@ const Listen = () => {
         posX += barWidth + 1;
       }
 
-      setInterval(() => {
-        if (areSimilarFrequencies(_mainFrecuency, frequencies[matchesInARow])) {
-          // setMatchesInARow(prev => prev + 1);
-          matchesInARow++;
-        } else {
-          if (
-            matchesInARow != 0 &&
-            areSimilarFrequencies(_mainFrecuency, frequencies[matchesInARow - 1])
-          ) {
-            return;
-          }
-          // setMatchesInARow(0);
-          matchesInARow = 0;
+      if (areSimilarFrequencies(_mainFrecuency, frequencies[matchesInARow])) {
+        // setMatchesInARow(prev => prev + 1);
+        matchesInARow++;
+      } else {
+        if (
+          matchesInARow != 0 &&
+          areSimilarFrequencies(_mainFrecuency, frequencies[matchesInARow - 1])
+        ) {
+          return;
         }
-        console.log('matchesInARow', matchesInARow);
-      }, 10000);
+        // setMatchesInARow(0);
+        matchesInARow = 0;
+      }
+      console.log('matchesInARow', matchesInARow);
     }
   }, []);
 
