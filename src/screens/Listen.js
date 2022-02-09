@@ -102,7 +102,8 @@ const Listen = () => {
 
       if (analyzing && _mainFrecuency != 13150 && _mainFrecuency != 13250 && lastFrequency != _mainFrecuency) {
         // const newChar = chars[(_mainFrecuency - 350) / 100];
-        const newChar = String.fromCharCode((_mainFrecuency - 350) / 100);
+        // const newChar = String.fromCharCode((_mainFrecuency - 350) / 100);
+        const newChar = String.fromCharCode(127 - (_mainFrecuency - 350) / 100);
         text += newChar
         console.log("newChar: ", newChar);
       }

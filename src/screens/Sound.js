@@ -24,7 +24,7 @@ const Sound = () => {
 
     await Array.from(text).map((char, i) => {
       // const charCode = char.charCodeAt(0);
-      const charCode = text.charCodeAt(i);
+      const charCode = text.charCodeAt(i) * -1 + 127
       console.log('charCode: ', charCode);
 
       setTimeout(() => {
