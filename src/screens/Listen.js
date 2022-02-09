@@ -23,6 +23,8 @@ const Listen = () => {
   const [mainFrecuency, setMainFrecuency] = useState(0);
   // const [matchesInARow, setMatchesInARow] = useState(0);
   let matchesInARow = 0;
+  let analyzing = false;
+  let text = '';
 
   function areSimilarFrequencies(frequencyA, frequencyB) {
     console.log('match freq A: ', frequencyA, 'with freq B', frequencyB);
@@ -43,6 +45,7 @@ const Listen = () => {
   useEffect(() => {
     const canvas = document.getElementById('canvas');
     const canvasCtx = canvas.getContext('2d');
+    let lastFrequency;
 
     navigator.mediaDevices
       .getUserMedia({
@@ -58,112 +61,60 @@ const Listen = () => {
         source.connect(analyser);
         analyser.connect(audioContext.destination);
         analyser.fftSize = 512;
-        analyser.smoothingTimeConstant = 0.9;
+        // analyser.smoothingTimeConstant = 0.9;
 
-        setInterval(() => {
-          const bufferLength = analyser.frequencyBinCount;
-          const dataArray = new Uint8Array(bufferLength);
-          const myDataArray = new Float32Array(bufferLength);
-          analyser.getByteFrequencyData(dataArray);
-          analyser.getFloatFrequencyData(myDataArray);
 
-          console.log('dataArray', dataArray);
-          console.log('myDataArray', myDataArray);
-          // const _mainFrecuency = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
-          // hay n barras desde 20 a 19367 hz
-          // cada barra abarca (19347 / n) hz
-          // greatestOnIndex * lo que abarca cada barra = mainFrecuency
-
-          const greatestOnIndex = getIndexOfGreatestElement(myDataArray);
-          const _mainFrecuency = greatestOnIndex * (22050 / myDataArray.length);
-          //   const _mainFrecuency = (greatestOnIndex + 1) * 20;
-          setMainFrecuency(_mainFrecuency);
-
-          canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-          canvasCtx.fillStyle = '#ad4';
-
-          const barWidth = canvas.width / bufferLength - 1;
-          let posX = 0;
-
-          for (let i = 0; i < bufferLength; i++) {
-            // const barHeight = myDataArray[i];
-            const barHeight = (myDataArray[i] + 140) * 2;
-            // canvasCtx.fillRect(i * 5, canvas.height - barHeight / 2, 4, barHeight / 2);
-            canvasCtx.fillRect(posX, canvas.height - barHeight / 2, barWidth, barHeight / 2);
-            posX += barWidth + 1;
-          }
-
-          if (areSimilarFrequencies(_mainFrecuency, frequencies[matchesInARow])) {
-            // setMatchesInARow(prev => prev + 1);
-            matchesInARow++;
-          } else {
-            if (
-              matchesInARow != 0 &&
-              areSimilarFrequencies(_mainFrecuency, frequencies[matchesInARow - 1])
-            ) {
-              return;
-            }
-            // setMatchesInARow(0);
-            matchesInARow = 0;
-          }
-          console.log('matchesInARow', matchesInARow);
-          if(matchesInARow == 4){
-            alert('Unlocked');
-          }
-        }, 5);
-
-        // frameLooper();
+        frameLooper();
       });
 
     function frameLooper() {
       window.requestAnimationFrame(frameLooper);
 
+      
       const bufferLength = analyser.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
       const myDataArray = new Float32Array(bufferLength);
       analyser.getByteFrequencyData(dataArray);
       analyser.getFloatFrequencyData(myDataArray);
 
-      console.log('dataArray', dataArray);
-      console.log('myDataArray', myDataArray);
-      // const _mainFrecuency = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
-      // hay n barras desde 20 a 19367 hz
-      // cada barra abarca (19347 / n) hz
-      // greatestOnIndex * lo que abarca cada barra = mainFrecuency
-
       const greatestOnIndex = getIndexOfGreatestElement(myDataArray);
-      const _mainFrecuency = greatestOnIndex * (22050 / myDataArray.length);
-      //   const _mainFrecuency = (greatestOnIndex + 1) * 20;
+      let _mainFrecuency = greatestOnIndex * (22050 / bufferLength);
+      _mainFrecuency = Math.floor(_mainFrecuency / 100) * 100 + 50;
       setMainFrecuency(_mainFrecuency);
+
+      if (_mainFrecuency == 13050) {
+        analyzing = true;
+      }
 
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
       canvasCtx.fillStyle = '#ad4';
 
-      const barWidth = canvas.width / bufferLength - 1;
+      const barWidth = 0.5;
       let posX = 0;
 
       for (let i = 0; i < bufferLength; i++) {
         // const barHeight = myDataArray[i];
         const barHeight = (myDataArray[i] + 140) * 2;
-        // canvasCtx.fillRect(i * 5, canvas.height - barHeight / 2, 4, barHeight / 2);
-        canvasCtx.fillRect(posX, canvas.height - barHeight / 2, barWidth, barHeight / 2);
+        canvasCtx.fillRect(i * 3, canvas.height - barHeight / 2, 2, barHeight / 2);
+        // canvasCtx.fillRect(posX, canvas.height - barHeight / 2, barWidth, barHeight / 2);
         posX += barWidth + 1;
       }
 
-      if (areSimilarFrequencies(_mainFrecuency, frequencies[matchesInARow])) {
-        // setMatchesInARow(prev => prev + 1);
-        matchesInARow++;
-      } else {
-        if (
-          matchesInARow != 0 &&
-          areSimilarFrequencies(_mainFrecuency, frequencies[matchesInARow - 1])
-        ) {
-          return;
-        }
-        // setMatchesInARow(0);
-        matchesInARow = 0;
+      if (analyzing && _mainFrecuency != 13050 && _mainFrecuency != 13150 && lastFrequency != _mainFrecuency) {
+        const newChar = chars[(_mainFrecuency - 350) / 100];
+        text += newChar
+        console.log("newChar: ", newChar);
       }
-      console.log('matchesInARow', matchesInARow);
+
+      if (analyzing && _mainFrecuency === 13150) {
+        alert(text);
+        analyzing = false;
+        text = '';
+      }
+
+      lastFrequency = _mainFrecuency;
+
+
     }
   }, []);
 
@@ -172,7 +123,7 @@ const Listen = () => {
       <IonContent>
         <Scroll>
           <h1>Listening</h1>
-          <Canvas id="canvas"></Canvas>
+          <Canvas id="canvas" width="800" />
           <p>Main Frecuency: {mainFrecuency} Hz</p>
           {/* <p>Matches in a row: {matchesInARow}</p> */}
         </Scroll>
@@ -190,3 +141,51 @@ const Canvas = styled.canvas`
   background: #f2f2f6;
   background: #5553;
 `;
+
+const chars = [
+  ' ',
+  'a',
+  'b',
+  'c',
+  'd',
+  'e',
+  'f',
+  'g',
+  'h',
+  'i',
+  'j',
+  'k',
+  'l',
+  'm',
+  'n',
+  'ñ',
+  'o',
+  'p',
+  'q',
+  'r',
+  's',
+  't',
+  'u',
+  'v',
+  'w',
+  'x',
+  'y',
+  'z',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '0',
+  '.',
+  '?',
+  '!',
+  ':',
+  '(',
+  ')',
+  '$',
+];

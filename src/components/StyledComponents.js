@@ -2,7 +2,6 @@ import { IonIcon, IonList } from '@ionic/react';
 import styled from 'styled-components';
 import { COLORS } from '../../styles/theme';
 
-
 export const Button = styled.div`
   margin-top: 5px;
   display: flex;
@@ -73,7 +72,6 @@ export const Row = styled.div`
   max-width: 700px;
   margin: 0 auto;
   height: ${({ h }) => h}px;
-
 `;
 
 export const Icon = styled(IonIcon)`
@@ -96,9 +94,11 @@ export const Text = styled.p`
   margin-left: ${({ ml }) => ml && ml};
 `;
 
-export const Scroll = styled(IonList)`
+export const Scroll = styled.div`
   width: 92%;
   padding: 4%;
   height: 100% !important;
   --height: 100% !important;
+  max-width: 700px !important;
+  margin: auto;
 `;
