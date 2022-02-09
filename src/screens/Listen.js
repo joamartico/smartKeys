@@ -61,18 +61,19 @@ const Listen = () => {
       _mainFrecuency = Math.floor(_mainFrecuency / 100) * 100 + 50;
       setMainFrecuency(_mainFrecuency);
 
-      if (_mainFrecuency == 13150) {
+      if (_mainFrecuency == 9950) {
         analyzing = true;
       }
 
-      if (analyzing) {
-        if (_mainFrecuency < 13150 && lastFrequency != _mainFrecuency) {
-          const newChar = String.fromCharCode(127 - (_mainFrecuency - 350) / 100);
+      if (analyzing && _mainFrecuency != 250) {
+        if (lastFrequency != _mainFrecuency && _mainFrecuency < 9950) {
+          let newChar = String.fromCharCode(127 - (_mainFrecuency - 350) / 100);
+          newChar = _mainFrecuency == 350 ? ' ' : newChar;
           text += newChar;
           console.log('newChar: ', newChar);
         }
 
-        if (_mainFrecuency === 13250) {
+        if (_mainFrecuency === 10050) {
           alert(text);
           analyzing = false;
           text = '';

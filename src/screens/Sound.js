@@ -9,12 +9,11 @@ function timeout(ms) {
   });
 }
 
+// const soundDuration = 300;
+const soundDuration = 120;
+
 const Sound = () => {
   const [text, setText] = useState();
-
-  // useEffect(() => {
-  //   soundFrequencies();
-  // }, []);
 
   async function soundFrequencies() {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -24,26 +23,27 @@ const Sound = () => {
 
     oscillator.start(0);
 
-    oscillator.frequency.value = 13150;
-    await timeout(300);
+    oscillator.frequency.value = 9950;
+    await timeout(soundDuration * 1);
 
     const textArr = Array.from(text);
 
     for (let i = 0; i < text.length; i++) {
-      const charCode = (await text.charCodeAt(i)) * -1 + 127;
+      const charCode = text.charCodeAt(i);
+      const inverseCharCode = charCode * -1 + 127;
 
       if (i != 0 && textArr[i] == textArr[i - 1]) {
-        oscillator.frequency.value = await 13550;
-        await timeout(300);
+        oscillator.frequency.value = await 250;
+        await timeout(soundDuration);
       }
 
-      const freq = 350 + charCode * 100;
+      const freq = charCode == 32 ? 350 : 350 + inverseCharCode * 100;
       oscillator.frequency.value = await freq;
-      await timeout(300);
+      await timeout(soundDuration);
     }
 
-    oscillator.frequency.value = await 13250;
-    await timeout(300);
+    oscillator.frequency.value = await 10050;
+    await timeout(soundDuration * 3);
 
     oscillator.stop();
   }
