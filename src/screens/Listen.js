@@ -82,7 +82,7 @@ const Listen = () => {
       _mainFrecuency = Math.floor(_mainFrecuency / 100) * 100 + 50;
       setMainFrecuency(_mainFrecuency);
 
-      if (_mainFrecuency == 13050) {
+      if (_mainFrecuency == 13150) {
         analyzing = true;
       }
 
@@ -100,13 +100,14 @@ const Listen = () => {
         posX += barWidth + 1;
       }
 
-      if (analyzing && _mainFrecuency != 13050 && _mainFrecuency != 13150 && lastFrequency != _mainFrecuency) {
-        const newChar = chars[(_mainFrecuency - 350) / 100];
+      if (analyzing && _mainFrecuency != 13150 && _mainFrecuency != 13250 && lastFrequency != _mainFrecuency) {
+        // const newChar = chars[(_mainFrecuency - 350) / 100];
+        const newChar = String.fromCharCode((_mainFrecuency - 350) / 100);
         text += newChar
         console.log("newChar: ", newChar);
       }
 
-      if (analyzing && _mainFrecuency === 13150) {
+      if (analyzing && _mainFrecuency === 13250) {
         alert(text);
         analyzing = false;
         text = '';

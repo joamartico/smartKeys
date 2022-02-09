@@ -20,36 +20,26 @@ const Sound = () => {
 
     oscillator.start(0);
 
-    // await setTimeout(() => {
-      oscillator.frequency.value = 13050;
-    // }, 150);
+    oscillator.frequency.value = 13150;
 
     await Array.from(text).map((char, i) => {
-      console.log('char: ', char);
-      const charCode = char.charCodeAt(0);
+      // const charCode = char.charCodeAt(0);
+      const charCode = text.charCodeAt(i);
       console.log('charCode: ', charCode);
 
       setTimeout(() => {
-        const freq = 350 + chars.indexOf(char) * 100;
+        // const freq = 350 + chars.indexOf(char) * 100;
+        const freq = 350 + charCode * 100;
         oscillator.frequency.value = freq;
       }, 300 * (i + 1));
 
-
-      setTimeout(() => {
-        oscillator.frequency.value = i == text.length - 1 && 13150;
-      }, 300 * (i + 2));
+      i == text.length - 1 &&
+        setTimeout(() => {
+          oscillator.frequency.value = 13250;
+        }, 300 * (i + 2));
     });
-    
 
-    // await frequencies.forEach(async (freq, i) => {
-    //   setTimeout(() => {
-    //     oscillator.frequency.value = freq;
-    //   }, 150 * i);
-    // });
-
-
-
-    oscillator.stop(0.30 * (text.length + 2));
+    oscillator.stop(0.3 * (text.length + 2));
   }
 
   return (
