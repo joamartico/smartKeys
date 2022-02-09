@@ -26,7 +26,7 @@ const Main = () => {
 
   return (
     <IonPage>
-      <IonHeader>
+      {/* <IonHeader>
         <Toolbar>
           <ToolbarButton width="55%">
             <Chain mobile /> <NativeBalance />
@@ -36,7 +36,7 @@ const Main = () => {
             <Account />
           </ToolbarButton>
         </Toolbar>
-      </IonHeader>
+      </IonHeader> */}
 
       <IonContent className="scroll" fullscreen>
       
