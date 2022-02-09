@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Scroll } from '../components/StyledComponents';
 
-let frequencies = [350, 1450, 750, 5050];
+function timeout(ms) {
+  return new Promise(fulfill => {
+    setTimeout(fulfill, ms);
+  });
+}
 
 const Sound = () => {
   const [text, setText] = useState();
@@ -21,32 +25,34 @@ const Sound = () => {
     oscillator.start(0);
 
     oscillator.frequency.value = 13150;
+    await timeout(300);
 
-    await Array.from(text).map((char, i) => {
-      // const charCode = char.charCodeAt(0);
-      const charCode = text.charCodeAt(i) * -1 + 127
-      console.log('charCode: ', charCode);
+    const textArr = Array.from(text);
 
-      setTimeout(() => {
-        // const freq = 350 + chars.indexOf(char) * 100;
-        const freq = 350 + charCode * 100;
-        oscillator.frequency.value = freq;
-      }, 300 * (i + 1));
+    for (let i = 0; i < text.length; i++) {
+      const charCode = (await text.charCodeAt(i)) * -1 + 127;
 
-      i == text.length - 1 &&
-        setTimeout(() => {
-          oscillator.frequency.value = 13250;
-        }, 300 * (i + 2));
-    });
+      if (i != 0 && textArr[i] == textArr[i - 1]) {
+        oscillator.frequency.value = await 13550;
+        await timeout(300);
+      }
 
-    oscillator.stop(0.3 * (text.length + 2));
+      const freq = 350 + charCode * 100;
+      oscillator.frequency.value = await freq;
+      await timeout(300);
+    }
+
+    oscillator.frequency.value = await 13250;
+    await timeout(300);
+
+    oscillator.stop();
   }
 
   return (
     <IonPage>
       <IonContent>
         <Scroll>
-          <h1>Sounding</h1>
+          <h1>Sound</h1>
           <TextInput
             type="text"
             placeholder="Write your text here"

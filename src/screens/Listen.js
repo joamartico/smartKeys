@@ -5,8 +5,6 @@ import { Scroll } from '../components/StyledComponents';
 
 let analyser;
 
-let frequencies = [250, 1450, 750, 5050];
-
 function getIndexOfGreatestElement(array) {
   let max = array[0];
   let index = 0;
@@ -21,26 +19,9 @@ function getIndexOfGreatestElement(array) {
 
 const Listen = () => {
   const [mainFrecuency, setMainFrecuency] = useState(0);
-  // const [matchesInARow, setMatchesInARow] = useState(0);
   let matchesInARow = 0;
   let analyzing = false;
   let text = '';
-
-  function areSimilarFrequencies(frequencyA, frequencyB) {
-    console.log('match freq A: ', frequencyA, 'with freq B', frequencyB);
-    const diff = Math.abs(frequencyA - frequencyB);
-    console.log('match diff: ', diff);
-    if (diff < 50) {
-      console.log('MATCH');
-      return true;
-      // setMatchesInARow(prev => prev + 1);
-      // matchesInARow++;
-    } else {
-      return false;
-      // setMatchesInARow(0);
-      // matchesInARow = 0;
-    }
-  }
 
   useEffect(() => {
     const canvas = document.getElementById('canvas');
@@ -63,14 +44,12 @@ const Listen = () => {
         analyser.fftSize = 512;
         // analyser.smoothingTimeConstant = 0.9;
 
-
         frameLooper();
       });
 
     function frameLooper() {
       window.requestAnimationFrame(frameLooper);
 
-      
       const bufferLength = analyser.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
       const myDataArray = new Float32Array(bufferLength);
@@ -86,37 +65,31 @@ const Listen = () => {
         analyzing = true;
       }
 
-      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-      canvasCtx.fillStyle = '#ad4';
+      if (analyzing) {
+        if (_mainFrecuency < 13150 && lastFrequency != _mainFrecuency) {
+          const newChar = String.fromCharCode(127 - (_mainFrecuency - 350) / 100);
+          text += newChar;
+          console.log('newChar: ', newChar);
+        }
 
-      const barWidth = 0.5;
-      let posX = 0;
-
-      for (let i = 0; i < bufferLength; i++) {
-        // const barHeight = myDataArray[i];
-        const barHeight = (myDataArray[i] + 140) * 2;
-        canvasCtx.fillRect(i * 3, canvas.height - barHeight / 2, 2, barHeight / 2);
-        // canvasCtx.fillRect(posX, canvas.height - barHeight / 2, barWidth, barHeight / 2);
-        posX += barWidth + 1;
-      }
-
-      if (analyzing && _mainFrecuency != 13150 && _mainFrecuency != 13250 && lastFrequency != _mainFrecuency) {
-        // const newChar = chars[(_mainFrecuency - 350) / 100];
-        // const newChar = String.fromCharCode((_mainFrecuency - 350) / 100);
-        const newChar = String.fromCharCode(127 - (_mainFrecuency - 350) / 100);
-        text += newChar
-        console.log("newChar: ", newChar);
-      }
-
-      if (analyzing && _mainFrecuency === 13250) {
-        alert(text);
-        analyzing = false;
-        text = '';
+        if (_mainFrecuency === 13250) {
+          alert(text);
+          analyzing = false;
+          text = '';
+        }
       }
 
       lastFrequency = _mainFrecuency;
 
+      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+      canvasCtx.fillStyle = '#ad4';
 
+      const barWidth = 2;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = (myDataArray[i] + 140) * 2;
+        canvasCtx.fillRect(i * (barWidth + 1), canvas.height - barHeight / 2, 2, barHeight / 2);
+      }
     }
   }, []);
 
@@ -127,7 +100,6 @@ const Listen = () => {
           <h1>Listening</h1>
           <Canvas id="canvas" width="800" />
           <p>Main Frecuency: {mainFrecuency} Hz</p>
-          {/* <p>Matches in a row: {matchesInARow}</p> */}
         </Scroll>
       </IonContent>
     </IonPage>
