@@ -12,7 +12,6 @@ import '../styles/global.css';
 import '../styles/variables.css';
 import { MoralisProvider } from 'react-moralis';
 
-
 function MyApp({ Component, pageProps }) {
   return (
     <>
@@ -20,7 +19,7 @@ function MyApp({ Component, pageProps }) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
         {/* SEO  */}
-        <title>Boilerplate</title>
+        <title>Goldtooth</title>
         <meta
           name="google-site-verification"
           // content=""

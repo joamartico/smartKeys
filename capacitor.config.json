@@ -1,6 +1,6 @@
 {
   "appId": "com.example.app",
-  "appName": "dapp-boilerplate",
+  "appName": "Goldtooth",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "out",

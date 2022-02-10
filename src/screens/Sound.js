@@ -1,7 +1,8 @@
 import { IonContent, IonInput, IonPage } from '@ionic/react';
+import { play } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Scroll } from '../components/StyledComponents';
+import { Icon, Scroll } from '../components/StyledComponents';
 
 function timeout(ms) {
   return new Promise(fulfill => {
@@ -23,13 +24,14 @@ const Sound = () => {
 
     oscillator.start(0);
 
-    oscillator.frequency.value = 9950;
+    oscillator.frequency.value = 10450;
     await timeout(soundDuration * 1);
 
     const textArr = Array.from(text);
 
     for (let i = 0; i < text.length; i++) {
       const charCode = text.charCodeAt(i);
+      console.log('charCode', charCode);
       const inverseCharCode = charCode * -1 + 127;
 
       if (i != 0 && textArr[i] == textArr[i - 1]) {
@@ -37,12 +39,13 @@ const Sound = () => {
         await timeout(soundDuration);
       }
 
-      const freq = charCode == 32 ? 350 : 350 + inverseCharCode * 100;
+      let freq = charCode == 32 ? 350 : 350 + inverseCharCode * 100;
+      freq = freq > 7850 ? freq + 600 : freq;
       oscillator.frequency.value = await freq;
       await timeout(soundDuration);
     }
 
-    oscillator.frequency.value = await 10050;
+    oscillator.frequency.value = await 10550;
     await timeout(soundDuration * 3);
 
     oscillator.stop();
@@ -53,12 +56,18 @@ const Sound = () => {
       <IonContent>
         <Scroll>
           <h1>Sound</h1>
-          <TextInput
-            type="text"
-            placeholder="Write your text here"
-            onIonChange={e => setText(e.detail.value)}
-          />
-          <PlayButton onClick={() => soundFrequencies()}>Play</PlayButton>
+
+          <div>
+            <TextInput
+              type="text"
+              placeholder="Write your text here"
+              onIonChange={e => setText(e.detail.value)}
+            />
+          </div>
+
+            <PlayButton onClick={() => soundFrequencies()}>
+              <Icon icon={play} />
+            </PlayButton>
         </Scroll>
       </IonContent>
     </IonPage>
@@ -68,19 +77,21 @@ const Sound = () => {
 const TextInput = styled(IonInput)`
   background: white;
   border-radius: 20px;
-  padding: 8px !important;
-  width: 95% !important;
+  padding: 8px 15px !important;
+  width: 90% !important;
+margin-top: 150px;
 `;
 
 const PlayButton = styled.div`
   display: flex;
-  margin: auto;
-  margin-top: 20%;
+  margin: 0 auto;
+margin-top: 80px;
+
   justify-content: center;
   align-items: center;
   width: 100px;
   height: 100px;
-  border-radius: 10%;
+  border-radius: 50%;
   background-color: #f5f5f550;
   box-shadow: 0px 0px 10px #000000;
   cursor: pointer;
@@ -93,51 +104,3 @@ const PlayButton = styled.div`
 `;
 
 export default Sound;
-
-const chars = [
-  ' ',
-  'a',
-  'b',
-  'c',
-  'd',
-  'e',
-  'f',
-  'g',
-  'h',
-  'i',
-  'j',
-  'k',
-  'l',
-  'm',
-  'n',
-  'ñ',
-  'o',
-  'p',
-  'q',
-  'r',
-  's',
-  't',
-  'u',
-  'v',
-  'w',
-  'x',
-  'y',
-  'z',
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '0',
-  '.',
-  '?',
-  '!',
-  ':',
-  '(',
-  ')',
-  '$',
-];

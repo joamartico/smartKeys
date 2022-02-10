@@ -95,10 +95,10 @@ export const Text = styled.p`
 `;
 
 export const Scroll = styled.div`
+  height: 85%;
   width: 92%;
   padding: 4%;
-  height: 100% !important;
-  --height: 100% !important;
   max-width: 700px !important;
   margin: auto;
+  overflow-y: scroll;
 `;

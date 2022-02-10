@@ -64,10 +64,11 @@ const Options = styled.div`
 `;
 
 const OptionButton = styled.div`
+  background-color: #ddd4;
+  background-color: #f5f5f550;
   width: 80%;
   height: 17%;
   border-radius: 20px;
-  background-color: #ddd4;
   display: flex;
   justify-content: center;
   align-items: center;
