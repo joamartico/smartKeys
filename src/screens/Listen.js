@@ -79,8 +79,9 @@ const Listen = () => {
     _mainFrecuency = Math.floor(_mainFrecuency / 100) * 100 + 50;
     setMainFrecuency(_mainFrecuency);
 
-    if (_mainFrecuency == 10450) {
+    if (_mainFrecuency == 9650) { // antes era 10450
       analyzing = true;
+      console.log('analyzing')
     }
 
     if (analyzing && _mainFrecuency != 250) {
@@ -88,12 +89,13 @@ const Listen = () => {
         const charCode =
           127 - ((_mainFrecuency > 7850 ? _mainFrecuency - 600 : _mainFrecuency) - 350) / 100;
         let newChar = String.fromCharCode(charCode);
+        console.log(charCode)
         newChar = _mainFrecuency == 350 ? ' ' : newChar;
         text += newChar;
         console.log('newChar: ', newChar);
       }
 
-      if (_mainFrecuency === 10550) {
+      if (_mainFrecuency === 9750) { // antes era 10550
         alert(text);
         analyzing = false;
         text = '';
